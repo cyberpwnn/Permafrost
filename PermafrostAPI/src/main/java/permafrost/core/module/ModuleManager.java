@@ -1,19 +1,20 @@
 package permafrost.core.module;
 
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
 import permafrost.core.lang.GList;
 import permafrost.core.lang.GMap;
 
-public class ModuleManager<P extends Plugin>
+public class ModuleManager
 {
 	private final GMap<Module, Boolean> modules;
 	private final GMap<Module, Integer> timings;
 	private final GList<Module> order;
-	private final P pl;
+	private final Plugin pl;
 	private final int[] task;
 	
-	public ModuleManager(P pl)
+	public ModuleManager(Plugin pl)
 	{
 		this.pl = pl;
 		modules = new GMap<Module, Boolean>();
@@ -25,6 +26,11 @@ public class ModuleManager<P extends Plugin>
 	public void register(Module module)
 	{
 		modules.put(module, false);
+	}
+	
+	public void registerListener(Listener listener)
+	{
+		pl.getServer().getPluginManager().registerEvents(listener, pl);
 	}
 	
 	public boolean enabled(Module module)
@@ -125,5 +131,15 @@ public class ModuleManager<P extends Plugin>
 		{
 			timings.put(module, getTiming(module));
 		}
+	}
+	
+	public Plugin getPlugin()
+	{
+		return pl;
+	}
+
+	public GMap<Module, Boolean> getModules()
+	{
+		return modules.copy();
 	}
 }

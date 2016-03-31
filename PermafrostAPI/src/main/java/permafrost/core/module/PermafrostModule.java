@@ -1,18 +1,23 @@
 package permafrost.core.module;
 
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
 import permafrost.core.lang.GList;
 
-public class PermafrostModule<P extends Plugin> implements Module
+public class PermafrostModule implements Module, Listener
 {
 	private final String name;
-	private final P pl;
+	private final Plugin pl;
+	private final ModuleManager manager;
 	
-	public PermafrostModule(P pl)
+	public PermafrostModule(ModuleManager manager)
 	{
-		this.pl = pl;
+		this.pl = manager.getPlugin();
 		this.name = this.getClass().getSimpleName();
+		this.manager = manager;
+		this.manager.register(this);
+		this.manager.registerListener(this);
 	}
 	
 	public void onEnable()
@@ -35,12 +40,7 @@ public class PermafrostModule<P extends Plugin> implements Module
 		return name;
 	}
 
-	public Plugin getPluginInterface()
-	{
-		return pl;
-	}
-	
-	public P getPl()
+	public Plugin getPlugin()
 	{
 		return pl;
 	}
@@ -64,5 +64,10 @@ public class PermafrostModule<P extends Plugin> implements Module
 		}
 		
 		return modules;
+	}
+	
+	public ModuleManager getManager()
+	{
+		return manager;
 	}
 }

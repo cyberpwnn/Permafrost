@@ -7,7 +7,8 @@ import permafrost.core.lang.GList;
 public interface Module
 {
 	String getName();
-	Plugin getPluginInterface();
+	Plugin getPlugin();
+	ModuleManager getManager();
 	void onEnable();
 	void onDisable();
 	void onTick();
